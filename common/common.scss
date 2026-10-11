@@ -1,0 +1,418 @@
+// VC Message Center 0.1.0
+//
+// Presentation-only. Discourse supplies a stable user-messages-page body class
+// across inbox, sent, new, unread, and archive routes. No message content,
+// permissions, folders, routes, or composer behavior is changed here.
+
+body.user-messages-page {
+  --vc-message-border: rgba(var(--primary-rgb), 0.1);
+  --vc-message-border-strong: rgba(var(--tertiary-rgb), 0.28);
+  --vc-message-muted: rgba(var(--primary-rgb), 0.66);
+  --vc-message-surface: rgba(var(--tertiary-rgb), 0.04);
+  --vc-message-unseen: rgba(var(--highlight-rgb), 0.13);
+
+  .user-main {
+    // Compact identity card. The user's native profile controls and expansion
+    // behavior remain intact.
+    > .about {
+      box-sizing: border-box;
+      min-height: 4.75rem;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--vc-message-border);
+      border-radius: calc(var(--d-border-radius-large, 16px) + 4px);
+      background: linear-gradient(
+        112deg,
+        rgba(var(--tertiary-rgb), 0.095),
+        rgba(var(--highlight-rgb), 0.08) 48%,
+        var(--secondary) 82%
+      );
+      box-shadow: 0 18px 42px -38px rgba(var(--primary-rgb), 0.75);
+
+      .details {
+        align-items: center;
+        min-height: 3.35rem;
+      }
+
+      .user-profile-avatar .avatar {
+        width: 52px;
+        height: 52px;
+        box-shadow:
+          0 0 0 3px var(--secondary),
+          0 0 0 5px rgba(var(--tertiary-rgb), 0.2),
+          0 8px 18px -12px rgba(var(--primary-rgb), 0.78);
+      }
+
+      .user-profile-names__primary {
+        font-size: var(--font-up-2);
+        font-weight: 750;
+        line-height: 1.1;
+      }
+
+      .user-profile-names__secondary,
+      .user-profile-names__title {
+        color: var(--vc-message-muted);
+      }
+
+      .controls .btn {
+        border-radius: var(--d-button-border-radius, 999px);
+        background: rgba(var(--secondary-rgb), 0.72);
+      }
+    }
+  }
+
+  // The profile destinations are context, not the inbox's primary workflow.
+  // Give them a quiet rail with a compact active state.
+  .user-navigation-primary {
+    box-sizing: border-box;
+    margin-top: 0.75rem;
+    padding: 0.3rem;
+    border: 1px solid var(--vc-message-border);
+    border-radius: var(--d-border-radius-large, 16px);
+    background: rgba(var(--primary-rgb), 0.018);
+
+    .horizontal-overflow-nav {
+      min-width: 0;
+    }
+
+    .user-nav {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.2rem;
+      margin: 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+
+      > li {
+        flex: 0 0 auto;
+      }
+
+      a {
+        border-radius: var(--d-button-border-radius, 999px);
+        color: var(--primary-medium);
+
+        &:hover,
+        &:focus-visible {
+          background: rgba(var(--tertiary-rgb), 0.07);
+          color: var(--primary);
+        }
+
+        &.active {
+          background: rgba(var(--tertiary-rgb), 0.12);
+          color: var(--tertiary);
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  // Folder navigation is the working toolbar. Keep the native inbox dropdown,
+  // folder links, Bot chats destination, layout control, and composer button.
+  .user-navigation-secondary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem 0.75rem;
+    box-sizing: border-box;
+    height: auto;
+    min-height: 4rem;
+    margin-top: 0.65rem;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--vc-message-border-strong);
+    border-radius: var(--d-border-radius-large, 16px);
+    background: linear-gradient(
+      105deg,
+      rgba(var(--tertiary-rgb), 0.08),
+      rgba(var(--highlight-rgb), 0.08) 58%,
+      rgba(var(--secondary-rgb), 0.88)
+    );
+    box-shadow: 0 18px 42px -38px rgba(var(--primary-rgb), 0.78);
+
+    .category-breadcrumb {
+      margin: 0;
+
+      .messages-dropdown-trigger {
+        border-radius: var(--d-button-border-radius, 999px);
+        background: var(--secondary);
+        font-weight: 700;
+      }
+    }
+
+    .horizontal-overflow-nav {
+      min-width: 0;
+    }
+
+    .messages-nav {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.2rem;
+      min-width: 0;
+      margin: 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+
+      > li {
+        flex: 0 0 auto;
+      }
+
+      a {
+        border-radius: var(--d-button-border-radius, 999px);
+        color: var(--primary-medium);
+
+        &:hover,
+        &:focus-visible {
+          background: rgba(var(--tertiary-rgb), 0.09);
+          color: var(--primary);
+        }
+
+        &.active {
+          background: var(--secondary);
+          color: var(--tertiary);
+          font-weight: 750;
+          box-shadow: 0 6px 16px -12px rgba(var(--primary-rgb), 0.75);
+        }
+      }
+
+      .user-nav__messages-new a,
+      .user-nav__messages-unread a {
+        background: rgba(var(--highlight-rgb), 0.1);
+      }
+    }
+
+    .navigation-controls {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0.35rem;
+      margin: 0;
+
+      .btn {
+        border-radius: var(--d-button-border-radius, 999px);
+      }
+
+      .new-private-message {
+        padding-inline: 1rem;
+        box-shadow: 0 10px 22px -16px rgba(var(--tertiary-rgb), 0.85);
+      }
+    }
+  }
+
+  // The list remains a semantic table, but border spacing and per-cell edges
+  // turn each conversation into a readable inbox row.
+  .topic-list {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+
+    .topic-list-header th {
+      padding: 0.45rem 0.75rem;
+      border: 0;
+      color: var(--vc-message-muted);
+      font-size: var(--font-down-1);
+      font-weight: 650;
+      letter-spacing: 0.035em;
+      text-transform: uppercase;
+    }
+
+    // Views add little decision value in a private inbox. Replies and recent
+    // activity remain visible, and Views returns immediately on rollback.
+    .views {
+      display: none;
+    }
+
+    .topic-list-body .topic-list-item {
+      td {
+        padding-block: 0.72rem;
+        border-top: 1px solid var(--vc-message-border);
+        border-bottom: 1px solid var(--vc-message-border);
+        background: var(--secondary);
+        transition:
+          border-color 120ms ease,
+          background-color 120ms ease;
+      }
+
+      td:first-child {
+        padding-left: 0.9rem;
+        border-left: 4px solid rgba(var(--tertiary-rgb), 0.18);
+        border-radius: var(--d-border-radius-large, 16px) 0 0
+          var(--d-border-radius-large, 16px);
+      }
+
+      td:last-child {
+        padding-right: 0.9rem;
+        border-right: 1px solid var(--vc-message-border);
+        border-radius: 0 var(--d-border-radius-large, 16px)
+          var(--d-border-radius-large, 16px) 0;
+      }
+
+      &:hover td,
+      &:focus-within td {
+        border-color: var(--vc-message-border-strong);
+        background-color: rgba(var(--tertiary-rgb), 0.045);
+      }
+
+      &.unseen-topic td,
+      &.new-topic td {
+        background: linear-gradient(
+          100deg,
+          var(--vc-message-unseen),
+          rgba(var(--tertiary-rgb), 0.035) 58%,
+          var(--secondary)
+        );
+      }
+
+      &.unseen-topic td:first-child,
+      &.new-topic td:first-child {
+        border-left-color: var(--tertiary);
+      }
+
+      &.unseen-topic .main-link .title,
+      &.new-topic .main-link .title {
+        color: var(--tertiary);
+        font-weight: 800;
+      }
+    }
+
+    .main-link {
+      .link-top-line {
+        line-height: 1.3;
+      }
+
+      .title {
+        color: var(--primary);
+        font-size: var(--font-up-1);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .topic-statuses {
+        color: var(--primary-medium);
+      }
+
+      .link-bottom-line {
+        margin-top: 0.25rem;
+        color: var(--vc-message-muted);
+        font-size: var(--font-down-1);
+      }
+    }
+
+    .posters {
+      white-space: nowrap;
+
+      a {
+        margin-left: -0.3rem;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+
+      .avatar {
+        width: 28px;
+        height: 28px;
+        border: 2px solid var(--secondary);
+        box-shadow: 0 0 0 1px rgba(var(--tertiary-rgb), 0.16);
+      }
+    }
+
+    .posts,
+    .activity {
+      color: var(--vc-message-muted);
+      font-size: var(--font-down-1);
+    }
+
+    .activity a {
+      color: inherit;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  body.user-messages-page {
+    .user-main > .about {
+      padding: 0.55rem 0.65rem;
+      border-radius: var(--d-border-radius-large, 16px);
+
+      .user-profile-avatar .avatar {
+        width: 44px;
+        height: 44px;
+      }
+
+      .user-profile-names__primary {
+        font-size: var(--font-up-1);
+      }
+    }
+
+    .user-navigation-primary {
+      margin-top: 0.55rem;
+      border-radius: var(--d-border-radius, 8px);
+    }
+
+    .user-navigation-secondary {
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-areas:
+        "message-inbox message-actions"
+        "message-folders message-folders";
+      padding: 0.5rem;
+
+      .category-breadcrumb {
+        grid-area: message-inbox;
+      }
+
+      .horizontal-overflow-nav {
+        grid-area: message-folders;
+      }
+
+      .navigation-controls {
+        grid-area: message-actions;
+        justify-content: flex-end;
+      }
+    }
+
+    .topic-list {
+      border-spacing: 0 0.4rem;
+
+      .topic-list-header {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .topic-list-body {
+        display: block;
+      }
+
+      .topic-list-body .topic-list-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+
+        .main-link {
+          display: block;
+        }
+
+        .activity {
+          display: flex;
+          align-items: center;
+        }
+
+        .posters,
+        .posts,
+        .views {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.user-messages-page .topic-list .topic-list-body .topic-list-item td {
+    transition: none;
+  }
+}
